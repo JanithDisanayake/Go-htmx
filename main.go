@@ -1,23 +1,22 @@
 package main
 
 import (
-	"fmt"
+	"go+htmx/models"
+	"html/template"
 	"log"
 	"net/http"
-	"text/template"
 )
 
-type Film struct {
-	Title    string
-	Director string
-}
-
 func main() {
-	fmt.Println("Hello, World!")
 
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		tmpl := template.Must(template.ParseFiles("index.html"))
-		films := map[string][]Film {
+		tmpl := template.Must(template.ParseFiles("views/index.html"))
+		tmpl.Execute(w, nil)
+	})
+
+	http.HandleFunc("/films", func(w http.ResponseWriter, r *http.Request) {
+		tmpl := template.Must(template.ParseFiles("views/films.html"))
+		films := map[string][]models.Film{
 			"Films": {
 				{Title: "The Goadfather", Director: "Francis Ford Copppola"},
 				{Title: "Blade Runner", Director: "Ridley Scott"},
@@ -26,5 +25,6 @@ func main() {
 		}
 		tmpl.Execute(w, films)
 	})
+
 	log.Fatal(http.ListenAndServe(":8000", nil))
 }
