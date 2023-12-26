@@ -26,5 +26,11 @@ func main() {
 		tmpl.Execute(w, films)
 	})
 
+	http.HandleFunc("/header", func(w http.ResponseWriter, r *http.Request) {
+		tmpl := template.Must(template.ParseFiles("views/header.html"))
+		tmpl.Execute(w, nil)
+	})
+
+
 	log.Fatal(http.ListenAndServe(":8000", nil))
 }
